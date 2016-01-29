@@ -2,6 +2,12 @@
   connection: local
   remote_user: root
   sudo: yes
+  
+    vars:
+  # ユーザ名とパスワードは変更可能です。
+   mysql_db_user: root
+   mysql_db_password: root
+   php_timezone: Asia/Tokyo
 
   tasks:
   - name: Install Apache packages
