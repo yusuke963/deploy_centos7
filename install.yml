@@ -1,0 +1,47 @@
+- hosts: localhost
+  connection: local
+  remote_user: root
+  sudo: yes
+
+  tasks:
+  - name: Install Apache packages
+  # Apache をインストール。
+    yum: name=httpd state=present
+
+  - name: Install mod_ssl
+  # mod_ssl をインストール。
+    yum: name=mod_ssl state=present
+
+  - name: Install php packages
+  # PHP5.4をインストール。
+    yum: name="{{ item }}" state=present
+    with_items:
+      - php
+      - php-mbstring
+      - php-pdo
+      - php-mysql
+      - php-xml
+      - php-gd
+      - php-ldap
+      - php-process
+      
+  - name: Install MariaDB
+  # MariaDBをインストール。
+    yum: name="{{ item }}" state=present
+    with_items:
+      - mariadb-server
+      - mariadb
+      - mariadb-libs
+      - MySQL-python
+
+  - name: restart httpd
+  # Apacheの再起動
+    service: name=httpd state=restarted enabled=yes
+
+  - name: restart mariadb
+  # MariaDBの再起動
+    service: name=mariadb state=restarted enabled=yes
+  - name: restart mariadb 
+  # MariaDBの起動
+    service: name=mariadb state=started
+
