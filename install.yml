@@ -3,22 +3,15 @@
   remote_user: root
   sudo: yes
   
-    vars:
-  # ユーザ名とパスワードは変更可能です。
-   mysql_db_user: root
-   mysql_db_password: root
-   php_timezone: Asia/Tokyo
-
   tasks:
-  - name: Install Apache packages
-  # Apache をインストール。
-    yum: name=httpd state=present
+  - name: Install WEB packages
+  # Apacheとmod_sslをインストール。
+    yum: name="{{ item }}" state=present
+    with_items:
+    - httpd
+    - mod_ssl
 
-  - name: Install mod_ssl
-  # mod_ssl をインストール。
-    yum: name=mod_ssl state=present
-
-  - name: Install php packages
+  - name: Install php5.4 packages
   # PHP5.4をインストール。
     yum: name="{{ item }}" state=present
     with_items:
@@ -31,7 +24,7 @@
       - php-ldap
       - php-process
       
-  - name: Install MariaDB
+  - name: Install DataBase packages
   # MariaDBをインストール。
     yum: name="{{ item }}" state=present
     with_items:
@@ -40,14 +33,11 @@
       - mariadb-libs
       - MySQL-python
 
-  - name: restart httpd
-  # Apacheの再起動
-    service: name=httpd state=restarted enabled=yes
-
-  - name: restart mariadb
-  # MariaDBの再起動
-    service: name=mariadb state=restarted enabled=yes
-  - name: restart mariadb 
-  # MariaDBの起動
-    service: name=mariadb state=started
+  - name: service restart
+  # ApacheとDBの再起動
+    service: name=""{{ item }]" state=restarted enabled=yes
+    with_items:
+      - httpd
+      - mariadb
+  
 
